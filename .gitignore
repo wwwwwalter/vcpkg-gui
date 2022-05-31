@@ -1,0 +1,7 @@
+.idea
+.vscode
+.vs
+NISI
+
+cmake-build-debug
+cmake-build-release
