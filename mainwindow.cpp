@@ -20,15 +20,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->showMaximized();
     this->setWindowIcon(QIcon(":/Images/Microsoft.ico"));
+
     process = new Process(this);
     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::do_print);
+    connect(process, &QProcess::stateChanged, this, &MainWindow::do_state);
+    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+            &MainWindow::do_cmd_finished);
+
     process_cmd = new Process(this);
     connect(process_cmd, &QProcess::readyReadStandardOutput, this, &MainWindow::do_cmd_print);
+    connect(process_cmd, &QProcess::stateChanged, this, &MainWindow::do_state);
     connect(process_cmd, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
             &MainWindow::do_cmd_finished);
 
     process_clone = new Process(this);
     connect(process_clone, &QProcess::readyReadStandardOutput, this, &MainWindow::do_clone_print);
+    connect(process_clone, &QProcess::stateChanged, this, &MainWindow::do_state);
     connect(process_clone, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
             &MainWindow::do_clone_finished);
 
@@ -182,8 +189,8 @@ int MainWindow::do_clone_finished(int exitCode, QProcess::ExitStatus exitStatus)
         settings->setValue("vcpkg/vcpkg_root_ready", vcpkg_root_ready);
         setPushButtonEnable();
     } else {
-        QDir dir(vcpkg_root+"/.git");
-        if(dir.exists()){
+        QDir dir(vcpkg_root + "/.git");
+        if (dir.exists()) {
             ui->pushButton_10->setEnabled(true);//bootstrap
         }
         return exitCode;
@@ -238,16 +245,15 @@ int MainWindow::do_choose_vcpkg_path() {
     if (qDialog.exec()) {
         if (vcpkg_root_old != vcpkg_root) {
 #ifdef _WIN32
-            QFile file(vcpkg_root+"/vcpkg.exe");
+            QFile file(vcpkg_root + "/vcpkg.exe");
 #elif
             QFile file(vcpkg_root+"vcpkg");
 #endif
-            qDebug()<<file.exists();
-            if(!file.exists()){
+            if (!file.exists()) {
                 setPushbuttonDisable();
                 vcpkg_root_ready = "false";
                 settings->setValue("vcpkg/vcpkg_root", vcpkg_root);
-            }else{
+            } else {
                 setPushButtonEnable();
                 vcpkg_root_ready = "true";
                 settings->setValue("vcpkg/vcpkg_root", vcpkg_root);
@@ -255,10 +261,9 @@ int MainWindow::do_choose_vcpkg_path() {
 
 
         }
-        if (!vcpkg_root.isEmpty())
-        {
-            QDir dir(vcpkg_root+"/.git");
-            if(dir.exists()){
+        if (!vcpkg_root.isEmpty()) {
+            QDir dir(vcpkg_root + "/.git");
+            if (dir.exists()) {
                 ui->pushButton_10->setEnabled(true);
             }
             ui->pushButton_12->setEnabled(true);
@@ -328,6 +333,17 @@ int MainWindow::setPushButtonEnable() {
     ui->pushButton_7->setEnabled(true);
     ui->pushButton_10->setEnabled(true);
     ui->pushButton_11->setEnabled(true);
+    return 0;
+}
+
+int MainWindow::do_state(QProcess::ProcessState state) {
+    if (state == QProcess::ProcessState::Starting) {
+        ui->textEdit_2->append("Starting");
+    } else if (state == QProcess::ProcessState::Running) {
+        ui->textEdit_2->append("Running");
+    } else if (state == QProcess::ProcessState::NotRunning) {
+        ui->textEdit_2->append("NotRunning");
+    }
     return 0;
 }
 

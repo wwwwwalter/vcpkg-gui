@@ -16,7 +16,7 @@ find_package(Qt5 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(vcpkg-gui main.cpp mainwindow.cpp mainwindow.h mainwindow.ui dialog.cpp dialog.h dialog.ui process.cpp process.h process.ui res.rc)
+add_executable(vcpkg-gui main.cpp mainwindow.cpp mainwindow.h mainwindow.ui dialog.cpp dialog.h dialog.ui process.cpp process.h res.rc)
 target_link_libraries(vcpkg-gui
         Qt5::Core
         Qt5::Gui

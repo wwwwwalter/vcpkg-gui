@@ -68,6 +68,8 @@ public:
 
     int setPushbuttonDisable();
 
+    int do_state(QProcess::ProcessState state);
+
 
 private:
     Ui::MainWindow *ui;
