@@ -12,7 +12,7 @@
 [![github-stars](https://img.shields.io/github/stars/wwwwwalter/vcpkg-gui?style=social&logo=github)](https://github.com/wwwwwalter/vcpkg-gui)
 [![github-forks](https://img.shields.io/github/forks/wwwwwalter/vcpkg-gui?label=Fork&style=social&logo=github)](https://github.com/wwwwwalter/vcpkg-gui)
 
-Author: :boy:Albert  :email:  15221024927@163.com, C/C++ software engineer.
+Author: :boy:晨风  :email:  15221024927@163.com, C/C++ software engineer.
 >Topic: You can use Microsoft vcpkg package manager easily, with vcpkg-gui.
 ### Download and install
 
